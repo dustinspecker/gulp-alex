@@ -1,6 +1,5 @@
 /* global describe, beforeEach, it */
 'use strict';
-// import alex from '../lib/';
 import {expect} from 'chai';
 import {File} from 'gulp-util';
 import {join} from 'path';

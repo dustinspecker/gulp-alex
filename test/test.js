@@ -95,8 +95,7 @@ describe('gulp-alex', () => {
 
       stream.on('data', () => {
         actualOptions = reporter.args[0][1];
-        expect(actualOptions.quiet).to.eql(false);
-        expect(actualOptions.silent).to.eql(false);
+        expect(actualOptions).to.eql({});
         done();
       });
 

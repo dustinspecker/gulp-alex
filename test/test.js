@@ -54,7 +54,7 @@ describe('gulp-alex', () => {
 
     stream.on('data', (file) => {
       expect(file).to.eql(validFile);
-      expect(reporter.called).to.eql(true);
+      expect(reporter.calledOnce).to.eql(true);
       done();
     });
 
@@ -74,7 +74,7 @@ describe('gulp-alex', () => {
 
     stream.on('data', (file) => {
       expect(file).to.eql(fileWithOneError);
-      expect(reporter.called).to.eql(true);
+      expect(reporter.calledOnce).to.eql(true);
       done();
     });
 

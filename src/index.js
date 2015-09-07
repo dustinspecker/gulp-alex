@@ -5,6 +5,11 @@ import reporter from 'vfile-reporter';
 import through from 'through2';
 
 export default function gulpAlex() {
+  let opts = {
+    quiet: false,
+    silent: false
+  };
+
   return through.obj(function (file, encoding, callback) {
     let convertedFile;
 
@@ -16,7 +21,7 @@ export default function gulpAlex() {
     convertedFile = convertVinylToVfile(file);
 
     alex(convertedFile);
-    console.log(reporter([convertedFile]));
+    console.log(reporter(convertedFile, opts));
 
     callback(null, file);
   });

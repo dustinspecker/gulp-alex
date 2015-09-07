@@ -82,4 +82,27 @@ describe('gulp-alex', () => {
 
     stream.end();
   });
+
+  describe('default options', () => {
+    it('should call reporter with default options when none passed', (done) => {
+      let actualOptions, alexProxy, reporter, stream;
+
+      reporter = sinon.stub();
+
+      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
+
+      stream = alexProxy();
+
+      stream.on('data', () => {
+        actualOptions = reporter.args[0][1];
+        expect(actualOptions.quiet).to.eql(false);
+        expect(actualOptions.silent).to.eql(false);
+        done();
+      });
+
+      stream.write(validFile);
+
+      stream.end();
+    });
+  });
 });

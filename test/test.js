@@ -7,9 +7,12 @@ import proxyquire from 'proxyquire';
 import sinon from 'sinon';
 
 describe('gulp-alex', () => {
-  let fileWithOneError, validFile;
+  let alexProxy, fileWithOneError, reporter, validFile;
 
   beforeEach(() => {
+    reporter = sinon.stub();
+    alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
+
     fileWithOneError = new File({
       base: './',
       path: join('users', 'dustin', 'project', 'awesome.project.md'),
@@ -24,13 +27,7 @@ describe('gulp-alex', () => {
   });
 
   it('should not report if no files passed', (done) => {
-    let alexProxy, reporter, stream;
-
-    reporter = sinon.stub();
-
-    alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
-
-    stream = alexProxy();
+    let stream = alexProxy();
 
     stream.on('data', (file) => {
       expect(file).to.eql(undefined);
@@ -44,13 +41,7 @@ describe('gulp-alex', () => {
   });
 
   it('should report if an error is not found', (done) => {
-    let alexProxy, reporter, stream;
-
-    reporter = sinon.stub();
-
-    alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
-
-    stream = alexProxy();
+    let stream = alexProxy();
 
     stream.on('data', (file) => {
       expect(file).to.eql(validFile);
@@ -64,13 +55,7 @@ describe('gulp-alex', () => {
   });
 
   it('should report if an error is found', (done) => {
-    let alexProxy, reporter, stream;
-
-    reporter = sinon.stub();
-
-    alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
-
-    stream = alexProxy();
+    let stream = alexProxy();
 
     stream.on('data', (file) => {
       expect(file).to.eql(fileWithOneError);
@@ -85,13 +70,8 @@ describe('gulp-alex', () => {
 
   describe('default options', () => {
     it('should call reporter with default options when none passed', (done) => {
-      let actualOptions, alexProxy, reporter, stream;
-
-      reporter = sinon.stub();
-
-      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
-
-      stream = alexProxy();
+      let stream = alexProxy()
+        , actualOptions;
 
       stream.on('data', () => {
         actualOptions = reporter.args[0][1];
@@ -107,16 +87,12 @@ describe('gulp-alex', () => {
 
   describe('configured options', () => {
     it('should pass options to reporter', (done) => {
-      let actualOptions, alexProxy, options, reporter, stream;
+      let actualOptions, options, stream;
 
       options = {
         quiet: true,
         silent: true
       };
-
-      reporter = sinon.stub();
-
-      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
 
       stream = alexProxy(options);
 
@@ -135,15 +111,11 @@ describe('gulp-alex', () => {
 
   describe('fail option', () => {
     it('should not emit an error if fail is false', (done) => {
-      let alexProxy, options, reporter, stream;
+      let options, stream;
 
       options = {
         fail: false
       };
-
-      reporter = sinon.stub();
-
-      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
 
       stream = alexProxy(options);
 
@@ -161,15 +133,11 @@ describe('gulp-alex', () => {
     });
 
     it('should emit an error if fail is true', (done) => {
-      let alexProxy, options, reporter, stream;
+      let options, stream;
 
       options = {
         fail: true
       };
-
-      reporter = sinon.stub();
-
-      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
 
       stream = alexProxy(options);
 

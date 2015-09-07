@@ -1,6 +1,7 @@
 'use strict';
 import alex from 'alex';
 import convertVinylToVfile from 'convert-vinyl-to-vfile';
+import indentString from 'indent-string';
 import {log} from 'gulp-util';
 import through from 'through2';
 
@@ -34,27 +35,6 @@ function getMaxLineColLength(messages) {
   return maxLineColLength;
 }
 
-/**
- * Determine number of spaces to prepend a reason to right-align line/col numbers
- * @param {Object} message - message to determine number of spaces for
- * @param {Number} message.column - column of reason
- * @param {Number} message.line - line of reason
- * @param {Number} maxLineColLength - known max col/line length of any reason for a file
- * @return {String} - prefix spaces to right-align col/line
- */
-function getNumOfSpacesToPrepend(message, maxLineColLength) {
-  const lineColLength = getLineColLength(message);
-
-  let spaces = '  '
-    , i;
-
-  for (i = lineColLength; i < maxLineColLength; i++) {
-    spaces += ' ';
-  }
-
-  return spaces;
-}
-
 export default function gulpAlex() {
   return through.obj(function (file, encoding, callback) {
     let alexResult, convertedFile, maxLineColLength;
@@ -74,9 +54,15 @@ export default function gulpAlex() {
       log(alexResult.filename + '.' + alexResult.extension);
 
       alexResult.messages.forEach((message) => {
-        let spaces = getNumOfSpacesToPrepend(message, maxLineColLength);
+        let formattedReason, numOfSpaces;
 
-        log(`${spaces}${message.line}:${message.column} ${message.reason}`);
+        // always indent at least 2 spaces
+        numOfSpaces = 2 + maxLineColLength - getLineColLength(message);
+
+        formattedReason = `${message.line}:${message.column} ${message.reason}`;
+        formattedReason = indentString(formattedReason, ' ', numOfSpaces);
+
+        log(formattedReason);
       });
     }
 

@@ -1,0 +1,48 @@
+{
+  "name": "gulp-alex",
+  "version": "0.0.0",
+  "description": "Gulp plugin for Alex",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "gulp test",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "repository": "dustinspecker/gulp-alex",
+  "keywords": [
+    "gulpplugin",
+    "alex"
+  ],
+  "author": {
+    "name": "Dustin Specker",
+    "email": "DustinSpecker@DustinSpecker.com",
+    "url": "https://github.com/dustinspecker"
+  },
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "alex": "^1.0.0",
+    "convert-vinyl-to-vfile": "^0.1.1",
+    "gulp-util": "^3.0.6",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.23",
+    "chai": "^3.0.0",
+    "coveralls": "^2.11.2",
+    "del": "^2.0.0",
+    "eslint-config-dustinspecker": "^0.1.0",
+    "eslint-path-formatter": "^0.1.1",
+    "eslint-plugin-no-use-extend-native": "^0.1.4",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-istanbul": "^0.10.0",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.0",
+    "gulp-mocha": "^2.1.0",
+    "proxyquire": "^1.7.1",
+    "sinon": "^1.16.1"
+  }
+}

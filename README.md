@@ -29,6 +29,8 @@ gulp.task('alex', () => {
 //   2:1 `garbageman` may be insensitive, use `garbage collector`, `waste collector`, `trash collector` instead
 ```
 
+![](assets/alex-error.png)
+
 ### ES5
 ```javascript
 // gulpfile.js

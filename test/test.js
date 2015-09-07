@@ -132,4 +132,58 @@ describe('gulp-alex', () => {
       stream.end();
     });
   });
+
+  describe('fail option', () => {
+    it('should not emit an error if fail is false', (done) => {
+      let alexProxy, options, reporter, stream;
+
+      options = {
+        fail: false
+      };
+
+      reporter = sinon.stub();
+
+      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
+
+      stream = alexProxy(options);
+
+      stream.on('data', () => {
+        done();
+      });
+
+      stream.on('error', () => {
+        throw new Error('Should not emit an error');
+      });
+
+      stream.write(fileWithOneError);
+
+      stream.end();
+    });
+
+    it('should emit an error if fail is true', (done) => {
+      let alexProxy, options, reporter, stream;
+
+      options = {
+        fail: true
+      };
+
+      reporter = sinon.stub();
+
+      alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
+
+      stream = alexProxy(options);
+
+      stream.on('error', (error) => {
+        expect(error.plugin).to.eql('gulp-alex');
+
+        expect(error.name).to.eql('AlexError');
+        expect(error.message).to.eql(`Alex failed for ${fileWithOneError.path}`);
+        done();
+      });
+
+      stream.write(fileWithOneError);
+
+      stream.end();
+    });
+  });
 });

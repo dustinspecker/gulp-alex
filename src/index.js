@@ -37,7 +37,7 @@ function getMaxLineColLength(messages) {
 
 export default function gulpAlex() {
   return through.obj(function (file, encoding, callback) {
-    let alexResult, convertedFile, maxLineColLength;
+    let convertedFile, maxLineColLength;
 
     if (!file || file.isNull()) {
       this.push();
@@ -46,14 +46,14 @@ export default function gulpAlex() {
 
     convertedFile = convertVinylToVfile(file);
 
-    alexResult = alex(convertedFile);
+    alex(convertedFile);
 
-    if (alexResult.messages.length > 0) {
-      maxLineColLength = getMaxLineColLength(alexResult.messages);
+    if (convertedFile.messages.length > 0) {
+      maxLineColLength = getMaxLineColLength(convertedFile.messages);
 
-      log(alexResult.filename + '.' + alexResult.extension);
+      log(convertedFile.filename + '.' + convertedFile.extension);
 
-      alexResult.messages.forEach((message) => {
+      convertedFile.messages.forEach((message) => {
         let formattedReason, numOfSpaces;
 
         // always indent at least 2 spaces

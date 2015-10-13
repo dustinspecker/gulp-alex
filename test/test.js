@@ -26,10 +26,10 @@ describe('gulp-alex', () => {
     });
   });
 
-  it('should not report if no files passed', (done) => {
+  it('should not report if no files passed', done => {
     let stream = alexProxy();
 
-    stream.on('data', (file) => {
+    stream.on('data', file => {
       expect(file).to.eql(undefined);
       expect(reporter.called).to.eql(false);
       done();
@@ -40,10 +40,10 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
-  it('should report if an error is not found', (done) => {
+  it('should report if an error is not found', done => {
     let stream = alexProxy();
 
-    stream.on('data', (file) => {
+    stream.on('data', file => {
       expect(file).to.eql(validFile);
       expect(reporter.calledOnce).to.eql(true);
       done();
@@ -54,10 +54,10 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
-  it('should report if an error is found', (done) => {
+  it('should report if an error is found', done => {
     let stream = alexProxy();
 
-    stream.on('data', (file) => {
+    stream.on('data', file => {
       expect(file).to.eql(fileWithOneError);
       expect(reporter.calledOnce).to.eql(true);
       done();
@@ -68,7 +68,7 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
-  it('should not print if an error is not found', (done) => {
+  it('should not print if an error is not found', done => {
     let stream = alexProxy();
 
     reporter.returns('');
@@ -85,7 +85,7 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
-  it('should print if an error is found', (done) => {
+  it('should print if an error is found', done => {
     let stream = alexProxy();
 
     reporter.returns('error');
@@ -103,7 +103,7 @@ describe('gulp-alex', () => {
   });
 
   describe('default options', () => {
-    it('should call reporter with default options when none passed', (done) => {
+    it('should call reporter with default options when none passed', done => {
       let stream = alexProxy()
         , actualOptions;
 
@@ -120,7 +120,7 @@ describe('gulp-alex', () => {
   });
 
   describe('configured options', () => {
-    it('should pass options to reporter', (done) => {
+    it('should pass options to reporter', done => {
       let actualOptions, options, stream;
 
       options = {
@@ -144,7 +144,7 @@ describe('gulp-alex', () => {
   });
 
   describe('fail option', () => {
-    it('should not emit an error if fail is false', (done) => {
+    it('should not emit an error if fail is false', done => {
       let options, stream;
 
       options = {
@@ -166,7 +166,7 @@ describe('gulp-alex', () => {
       stream.end();
     });
 
-    it('should emit an error if fail is true', (done) => {
+    it('should emit an error if fail is true', done => {
       let options, stream;
 
       options = {
@@ -175,7 +175,7 @@ describe('gulp-alex', () => {
 
       stream = alexProxy(options);
 
-      stream.on('error', (error) => {
+      stream.on('error', error => {
         expect(error.plugin).to.eql('gulp-alex');
 
         expect(error.name).to.eql('AlexError');

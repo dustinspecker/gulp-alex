@@ -8,7 +8,7 @@ import through from 'through2';
 export default function gulpAlex(opts = {}) {
   return through.obj(function (file, encoding, callback) {
     let error = null
-      , convertedFile;
+      , convertedFile, report;
 
     if (!file || file.isNull()) {
       this.push();
@@ -18,7 +18,11 @@ export default function gulpAlex(opts = {}) {
     convertedFile = convertVinylToVfile(file);
 
     alex(convertedFile);
-    console.log(reporter(convertedFile, opts));
+
+    report = reporter(convertedFile, opts);
+    if (report) {
+      console.log(report);
+    }
 
     if (opts.fail && convertedFile.messages.length > 0) {
       error = new PluginError('gulp-alex', {

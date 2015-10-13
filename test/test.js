@@ -68,6 +68,40 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
+  it('should not print if an error is not found', (done) => {
+    let stream = alexProxy();
+
+    reporter.returns('');
+    sinon.spy(global.console, 'log');
+
+    stream.on('data', () => {
+      expect(global.console.log.called).to.eql(false);
+      global.console.log.restore();
+      done();
+    });
+
+    stream.write(validFile);
+
+    stream.end();
+  });
+
+  it('should print if an error is found', (done) => {
+    let stream = alexProxy();
+
+    reporter.returns('error');
+    sinon.spy(global.console, 'log');
+
+    stream.on('data', () => {
+      expect(global.console.log.calledWith('error')).to.eql(true);
+      global.console.log.restore();
+      done();
+    });
+
+    stream.write(validFile);
+
+    stream.end();
+  });
+
   describe('default options', () => {
     it('should call reporter with default options when none passed', (done) => {
       let stream = alexProxy()

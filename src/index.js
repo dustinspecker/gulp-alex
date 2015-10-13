@@ -18,7 +18,10 @@ export default function gulpAlex(opts = {}) {
     convertedFile = convertVinylToVfile(file);
 
     alex(convertedFile);
-    console.log(reporter(convertedFile, opts));
+    var message = reporter(convertedFile, opts);
+    if (message !== "") {
+      console.log(message);
+    }
 
     if (opts.fail && convertedFile.messages.length > 0) {
       error = new PluginError('gulp-alex', {

@@ -22,7 +22,9 @@ import gulp from 'gulp';
 // Garbagemen versus Abe Lincoln!
 gulp.task('alex', () => {
   return gulp.src('./README.md')
-    .pipe(alex());
+    .pipe(alex())
+    .pipe(alex.reporter()) // prints any issues Alex finds to the console
+    .pipe(alex.reporter('fail')); // causes the task to fail if Alex finds any issues
 });
 // `gulp alex` produces in console:
 // README.md
@@ -42,24 +44,13 @@ var gulp = require('gulp');
 // Garbagemen versus Abe Lincoln!
 gulp.task('alex', function () {
   return gulp.src('./README.md')
-    .pipe(alex());
+    .pipe(alex())
+    .pipe(alex.reporter()) // prints any issues Alex finds to the console
+    .pipe(alex.reporter('fail')); // causes the task to fail if Alex finds any issues
 });
 // `gulp alex` produces in console:
 // README.md
 //   2:1 `garbageman` may be insensitive, use `garbage collector`, `waste collector`, `trash collector` instead
-```
-
-## Options
-
-Supports all options supported by [vfile-reporter](https://github.com/wooorm/vfile-reporter#reportervfiles-options).
-
-Additionally, supports a `fail` option. When Alex encounters a warning or fatal reason, gulp-alex wiill emit an error if `fail` is `true`. The default value is `false`.
-
-```javascript
-gulp.task('alex', function () {
-  return gulp.src('./README.md')
-    .pipe(alex({fail: true}));
-});
 ```
 
 ## LICENSE

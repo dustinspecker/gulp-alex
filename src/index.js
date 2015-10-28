@@ -5,7 +5,20 @@ import {PluginError} from 'gulp-util';
 import reporter from 'vfile-reporter';
 import through from 'through2';
 
-export default function gulpAlex(opts = {}) {
+module.exports = function () {
+  return through.obj(function (file, encoding, callback) {
+    if (!file || file.isNull()) {
+      this.push();
+      return callback();
+    }
+
+    file.alex = alex(file.contents.toString());
+
+    callback(null, file);
+  });
+};
+
+module.exports.reporter = function (reporterType) {
   return through.obj(function (file, encoding, callback) {
     let error = null
       , convertedFile, report;
@@ -16,15 +29,16 @@ export default function gulpAlex(opts = {}) {
     }
 
     convertedFile = convertVinylToVfile(file);
+    convertedFile.messages = file.alex.messages;
 
-    alex(convertedFile);
-
-    report = reporter(convertedFile, opts);
-    if (report) {
-      console.log(report);
+    if (!reporterType) {
+      report = reporter(convertedFile, {quiet: true});
+      if (report) {
+        console.log(report);
+      }
     }
 
-    if (opts.fail && convertedFile.messages.length > 0) {
+    if (reporterType === 'fail' && file.alex.messages.length > 0) {
       error = new PluginError('gulp-alex', {
         name: 'AlexError',
         message: `Alex failed for ${file.path}`
@@ -33,4 +47,4 @@ export default function gulpAlex(opts = {}) {
 
     callback(error, file);
   });
-}
+};

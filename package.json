@@ -29,7 +29,7 @@
     "vfile-reporter": "^1.3.0"
   },
   "devDependencies": {
-    "babel-core": "^5.8.23",
+    "babel-core": "^6.0.2",
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
     "del": "^2.0.0",

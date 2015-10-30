@@ -29,7 +29,8 @@
     "vfile-reporter": "^1.3.0"
   },
   "devDependencies": {
-    "babel-core": "^5.8.23",
+    "babel-core": "^6.0.12",
+    "babel-preset-es2015": "^6.0.12",
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
     "del": "^2.0.0",
@@ -37,7 +38,7 @@
     "eslint-path-formatter": "^0.1.1",
     "eslint-plugin-no-use-extend-native": "^0.1.4",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.1.0",
+    "gulp-babel": "^6.0.0",
     "gulp-eslint": "^1.0.0",
     "gulp-istanbul": "^0.10.0",
     "gulp-jscs": "^3.0.0",

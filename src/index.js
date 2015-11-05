@@ -26,6 +26,7 @@ module.exports.reporter = function (reporterType) {
 
   return through.obj(function (file, encoding, callback) {
     let error = null
+      , foundIssues = false
       , convertedFile, report;
 
     if (!file || file.isNull()) {
@@ -44,14 +45,16 @@ module.exports.reporter = function (reporterType) {
       }
     }
 
-    if (isFailImmediatelyReporter && file.alex.messages.length > 0) {
+    foundIssues = !!file.alex.messages.length;
+
+    if (isFailImmediatelyReporter && foundIssues) {
       error = new PluginError('gulp-alex', {
         name: 'AlexError',
         message: `Alex failed for ${file.path}`
       });
     }
 
-    if (reporterType === 'fail' && file.alex.messages.length > 0) {
+    if (reporterType === 'fail' && foundIssues) {
       failedFiles.push(file.path);
     }
 

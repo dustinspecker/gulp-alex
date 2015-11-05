@@ -147,20 +147,42 @@ describe('gulp-alex', () => {
 
       stream.end();
     });
+  });
 
-    it('should emit an error if using fail reporter', done => {
+  describe('fail reporter', () => {
+    it('should not emit an error if no issues', done => {
       let stream = alexProxy();
 
       stream
+        .pipe(alexProxy.reporter())
+        .pipe(alexProxy.reporter('fail'))
+        .on('error', () => {
+          throw new Error('Should not emit an error');
+        })
+        .on('end', done)
+        .resume();
+
+      stream.write(validFile);
+      stream.write(validFile);
+
+      stream.end();
+    });
+
+    it('should emit an error after all files have been processed', done => {
+      let stream = alexProxy();
+
+      stream
+        .pipe(alexProxy.reporter())
         .pipe(alexProxy.reporter('fail'))
         .on('error', error => {
           expect(error.plugin).to.eql('gulp-alex');
 
           expect(error.name).to.eql('AlexError');
-          expect(error.message).to.eql(`Alex failed for ${fileWithOneError.path}`);
+          expect(error.message).to.eql(`Alex failed for ${filePath}, ${filePath}`);
           done();
         });
 
+      stream.write(fileWithOneError);
       stream.write(fileWithOneError);
 
       stream.end();

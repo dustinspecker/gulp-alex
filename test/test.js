@@ -7,7 +7,8 @@ import proxyquire from 'proxyquire';
 import sinon from 'sinon';
 
 describe('gulp-alex', () => {
-  let alexProxy, fileWithOneError, reporter, validFile;
+  let filePath = join('users', 'dustin', 'project', 'awesome.project.md')
+    , alexProxy, fileWithOneError, reporter, validFile;
 
   beforeEach(() => {
     reporter = sinon.stub();
@@ -15,13 +16,13 @@ describe('gulp-alex', () => {
 
     fileWithOneError = new File({
       base: './',
-      path: join('users', 'dustin', 'project', 'awesome.project.md'),
+      path: filePath,
       contents: new Buffer('Garbagemen versus Abe Lincoln!')
     });
 
     validFile = new File({
       base: './',
-      path: join('users', 'dustin', 'project', 'awesome.project.md'),
+      path: filePath,
       contents: new Buffer('Abe Lincoln is awesome.')
     });
   });
@@ -112,8 +113,8 @@ describe('gulp-alex', () => {
     stream.end();
   });
 
-  describe('fail option', () => {
-    it('should not emit an error if fail reporter is not being used', done => {
+  describe('failImmediately reporter', () => {
+    it('should not emit an error if failImmediately reporter is not being used', done => {
       let stream = alexProxy();
 
       stream
@@ -121,7 +122,24 @@ describe('gulp-alex', () => {
         .on('error', () => {
           throw new Error('Should not emit an error');
         })
-        .on('data', () => {
+        .on('end', done)
+        .resume();
+
+      stream.write(fileWithOneError);
+
+      stream.end();
+    });
+
+    it('should emit an error if using failImmediately reporter', done => {
+      let stream = alexProxy();
+
+      stream
+        .pipe(alexProxy.reporter('failImmediately'))
+        .on('error', error => {
+          expect(error.plugin).to.eql('gulp-alex');
+
+          expect(error.name).to.eql('AlexError');
+          expect(error.message).to.eql(`Alex failed for ${fileWithOneError.path}`);
           done();
         });
 

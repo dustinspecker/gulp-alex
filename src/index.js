@@ -31,6 +31,7 @@ module.exports.reporter = function (reporterType) {
     convertedFile = convertVinylToVfile(file);
     convertedFile.messages = file.alex.messages;
 
+    // default report to console
     if (!reporterType) {
       report = reporter(convertedFile, {quiet: true});
       if (report) {
@@ -38,7 +39,7 @@ module.exports.reporter = function (reporterType) {
       }
     }
 
-    if (reporterType === 'fail' && file.alex.messages.length > 0) {
+    if (reporterType === 'failImmediately' && file.alex.messages.length > 0) {
       error = new PluginError('gulp-alex', {
         name: 'AlexError',
         message: `Alex failed for ${file.path}`

@@ -24,7 +24,7 @@ gulp.task('alex', () => {
   return gulp.src('./README.md')
     .pipe(alex())
     .pipe(alex.reporter()) // prints any issues Alex finds to the console
-    .pipe(alex.reporter('fail')); // causes the task to fail if Alex finds any issues
+    .pipe(alex.reporter('failImmediately')); // causes the task to fail right away if Alex finds any issues with a file
 });
 // `gulp alex` produces in console:
 // README.md
@@ -46,7 +46,7 @@ gulp.task('alex', function () {
   return gulp.src('./README.md')
     .pipe(alex())
     .pipe(alex.reporter()) // prints any issues Alex finds to the console
-    .pipe(alex.reporter('fail')); // causes the task to fail if Alex finds any issues
+    .pipe(alex.reporter('failImmediately')); // causes the task to fail right away if Alex finds any issues with a file
 });
 // `gulp alex` produces in console:
 // README.md

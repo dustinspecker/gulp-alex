@@ -19,7 +19,10 @@ module.exports = function () {
 };
 
 module.exports.reporter = function (reporterType) {
-  let failedFiles = [];
+  let failedFiles = []
+    , isDefaultReporter = !reporterType
+    , isFailReporter = reporterType === 'fail'
+    , isFailImmediatelyReporter = reporterType === 'failImmediately';
 
   return through.obj(function (file, encoding, callback) {
     let error = null
@@ -34,14 +37,14 @@ module.exports.reporter = function (reporterType) {
     convertedFile.messages = file.alex.messages;
 
     // default report to console
-    if (!reporterType) {
+    if (isDefaultReporter) {
       report = reporter(convertedFile, {quiet: true});
       if (report) {
         console.log(report);
       }
     }
 
-    if (reporterType === 'failImmediately' && file.alex.messages.length > 0) {
+    if (isFailImmediatelyReporter && file.alex.messages.length > 0) {
       error = new PluginError('gulp-alex', {
         name: 'AlexError',
         message: `Alex failed for ${file.path}`
@@ -54,7 +57,7 @@ module.exports.reporter = function (reporterType) {
 
     callback(error, file);
   }, function (callback) {
-    if (reporterType === 'fail' && failedFiles.length) {
+    if (isFailReporter && failedFiles.length) {
       this.emit('error', new PluginError('gulp-alex', {
         name: 'AlexError',
         message: `Alex failed for ${failedFiles.join(', ')}`

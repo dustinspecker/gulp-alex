@@ -1,17 +1,17 @@
 /* global describe, beforeEach, it */
 'use strict';
+import austin from 'austin';
 import {expect} from 'chai';
 import {File} from 'gulp-util';
 import {join} from 'path';
 import proxyquire from 'proxyquire';
-import sinon from 'sinon';
 
 describe('gulp-alex', () => {
   let filePath = join('users', 'dustin', 'project', 'awesome.project.md')
     , alexProxy, fileWithOneError, reporter, validFile;
 
   beforeEach(() => {
-    reporter = sinon.stub();
+    reporter = austin.spy();
     alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
 
     fileWithOneError = new File({
@@ -34,7 +34,7 @@ describe('gulp-alex', () => {
       .pipe(alexProxy.reporter())
       .on('data', file => {
         expect(file).to.eql(undefined);
-        expect(reporter.called).to.eql(false);
+        expect(reporter.callCount()).to.eql(0);
         done();
       });
 
@@ -50,7 +50,7 @@ describe('gulp-alex', () => {
       .pipe(alexProxy.reporter())
       .on('data', file => {
         expect(file).to.eql(validFile);
-        expect(reporter.calledOnce).to.eql(true);
+        expect(reporter.callCount()).to.eql(1);
         done();
       });
 
@@ -66,7 +66,7 @@ describe('gulp-alex', () => {
       .pipe(alexProxy.reporter())
       .on('data', file => {
         expect(file).to.eql(fileWithOneError);
-        expect(reporter.calledOnce).to.eql(true);
+        expect(reporter.callCount()).to.eql(1);
         done();
       });
 
@@ -79,12 +79,12 @@ describe('gulp-alex', () => {
     let stream = alexProxy();
 
     reporter.returns('');
-    sinon.spy(global.console, 'log');
+    austin.spy(global.console, 'log');
 
     stream
       .pipe(alexProxy.reporter())
       .on('data', () => {
-        expect(global.console.log.called).to.eql(false);
+        expect(global.console.log.callCount()).to.eql(0);
         global.console.log.restore();
         done();
       });
@@ -98,12 +98,12 @@ describe('gulp-alex', () => {
     let stream = alexProxy();
 
     reporter.returns('error');
-    sinon.spy(global.console, 'log');
+    austin.spy(global.console, 'log');
 
     stream
       .pipe(alexProxy.reporter())
       .on('data', () => {
-        expect(global.console.log.calledWith('error')).to.eql(true);
+        expect(global.console.log.calledWith(['error'])).to.eql(true);
         global.console.log.restore();
         done();
       });

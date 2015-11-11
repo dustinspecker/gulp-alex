@@ -103,7 +103,7 @@ describe('gulp-alex', () => {
     stream
       .pipe(alexProxy.reporter())
       .on('data', () => {
-        expect(global.console.log.calledWith(['error'])).to.eql(true);
+        expect(global.console.log.calledWith('error')).to.eql(true);
         global.console.log.restore();
         done();
       });

@@ -29,7 +29,7 @@
     "vfile-reporter": "^1.3.0"
   },
   "devDependencies": {
-    "austin": "0.0.1",
+    "austin": "0.0.3",
     "babel-core": "^6.0.12",
     "babel-preset-es2015": "^6.0.12",
     "chai": "^3.0.0",

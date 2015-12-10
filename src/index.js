@@ -1,3 +1,4 @@
+/* eslint no-invalid-this: 0 */
 'use strict';
 import alex from 'alex';
 import convertVinylToVfile from 'convert-vinyl-to-vfile';
@@ -19,7 +20,7 @@ module.exports = function () {
 };
 
 module.exports.reporter = function (reporterType) {
-  let failedFiles = []
+  const failedFiles = []
     , isDefaultReporter = !reporterType
     , isFailReporter = reporterType === 'fail'
     , isFailImmediatelyReporter = reporterType === 'failImmediately';

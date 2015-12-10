@@ -7,12 +7,14 @@ import {join} from 'path';
 import proxyquire from 'proxyquire';
 
 describe('gulp-alex', () => {
-  let filePath = join('users', 'dustin', 'project', 'awesome.project.md')
-    , alexProxy, fileWithOneError, reporter, validFile;
+  const filePath = join('users', 'dustin', 'project', 'awesome.project.md');
+  let alexProxy, fileWithOneError, reporter, stream, validFile;
 
   beforeEach(() => {
     reporter = austin.spy();
     alexProxy = proxyquire('../lib', {'vfile-reporter': reporter});
+
+    stream = alexProxy();
 
     fileWithOneError = new File({
       base: './',
@@ -28,8 +30,6 @@ describe('gulp-alex', () => {
   });
 
   it('should not report if no files passed', done => {
-    let stream = alexProxy();
-
     stream
       .pipe(alexProxy.reporter())
       .on('data', file => {
@@ -44,8 +44,6 @@ describe('gulp-alex', () => {
   });
 
   it('should report if an error is not found', done => {
-    let stream = alexProxy();
-
     stream
       .pipe(alexProxy.reporter())
       .on('data', file => {
@@ -60,8 +58,6 @@ describe('gulp-alex', () => {
   });
 
   it('should report if an error is found', done => {
-    let stream = alexProxy();
-
     stream
       .pipe(alexProxy.reporter())
       .on('data', file => {
@@ -76,8 +72,6 @@ describe('gulp-alex', () => {
   });
 
   it('should not print if an error is not found', done => {
-    let stream = alexProxy();
-
     reporter.returns('');
     austin.spy(global.console, 'log');
 
@@ -95,8 +89,6 @@ describe('gulp-alex', () => {
   });
 
   it('should print if an error is found', done => {
-    let stream = alexProxy();
-
     reporter.returns('error');
     austin.spy(global.console, 'log');
 
@@ -115,8 +107,6 @@ describe('gulp-alex', () => {
 
   describe('failImmediately reporter', () => {
     it('should not emit an error if failImmediately reporter is not being used', done => {
-      let stream = alexProxy();
-
       stream
         .pipe(alexProxy.reporter())
         .on('error', () => {
@@ -131,8 +121,6 @@ describe('gulp-alex', () => {
     });
 
     it('should emit an error if using failImmediately reporter', done => {
-      let stream = alexProxy();
-
       stream
         .pipe(alexProxy.reporter('failImmediately'))
         .on('error', error => {
@@ -151,8 +139,6 @@ describe('gulp-alex', () => {
 
   describe('fail reporter', () => {
     it('should not emit an error if no issues', done => {
-      let stream = alexProxy();
-
       stream
         .pipe(alexProxy.reporter())
         .pipe(alexProxy.reporter('fail'))
@@ -169,8 +155,6 @@ describe('gulp-alex', () => {
     });
 
     it('should emit an error after all files have been processed', done => {
-      let stream = alexProxy();
-
       stream
         .pipe(alexProxy.reporter())
         .pipe(alexProxy.reporter('fail'))

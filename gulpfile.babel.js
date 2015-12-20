@@ -17,8 +17,8 @@ const configFiles = './gulpfile.babel.js'
 
 gulp.task('clean', () => del(destDir));
 
-gulp.task('lint', ['clean'], () => {
-  return gulp.src([configFiles, srcFiles, testFiles])
+gulp.task('lint', ['clean'], () =>
+  gulp.src([configFiles, srcFiles, testFiles])
     .pipe(eslint())
     .pipe(eslint.formatEach('./node_modules/eslint-path-formatter'))
     .pipe(eslint.failOnError())
@@ -27,19 +27,19 @@ gulp.task('lint', ['clean'], () => {
     .pipe(jscs.reporter('fail'))
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
-    .pipe(jshint.reporter('fail'));
-});
+    .pipe(jshint.reporter('fail'))
+);
 
-gulp.task('compile', ['lint'], () => {
-  return gulp.src(srcFiles)
+gulp.task('compile', ['lint'], () =>
+  gulp.src(srcFiles)
     .pipe(babel())
-    .pipe(gulp.dest(destDir));
-});
+    .pipe(gulp.dest(destDir))
+);
 
 gulp.task('build', ['compile']);
 
 gulp.task('test', ['build'], cb => {
-  gulp.src([destDir + '*.js'])
+  gulp.src([`${destDir}*.js`])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {

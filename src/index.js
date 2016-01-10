@@ -54,7 +54,7 @@ module.exports.reporter = reporterType => {
       })
     }
 
-    if (reporterType === 'fail' && foundIssues) {
+    if (isFailReporter && foundIssues) {
       failedFiles.push(file.path)
     }
 

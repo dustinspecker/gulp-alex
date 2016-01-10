@@ -6,8 +6,8 @@ import {PluginError} from 'gulp-util'
 import reporter from 'vfile-reporter'
 import through from 'through2'
 
-module.exports = function () {
-  return through.obj(function (file, encoding, callback) {
+module.exports = () =>
+  through.obj(function (file, encoding, callback) {
     if (!file || file.isNull()) {
       this.push()
       return callback()
@@ -17,9 +17,8 @@ module.exports = function () {
 
     callback(null, file)
   })
-}
 
-module.exports.reporter = function (reporterType) {
+module.exports.reporter = reporterType => {
   const failedFiles = []
     , isDefaultReporter = !reporterType
     , isFailReporter = reporterType === 'fail'

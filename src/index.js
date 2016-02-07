@@ -44,9 +44,9 @@ module.exports = () =>
       })
   })
 
-module.exports.reporter = reporterType => {
+module.exports.reporter = (reporterType = 'default') => {
   const failedFiles = []
-    , isDefaultReporter = !reporterType
+    , isDefaultReporter = reporterType === 'default'
     , isFailReporter = reporterType === 'fail'
     , isFailImmediatelyReporter = reporterType === 'failImmediately'
 

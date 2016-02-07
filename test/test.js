@@ -9,11 +9,15 @@ import proxyquire from 'proxyquire'
 
 describe('gulp-alex', () => {
   const filePath = join('users', 'dustin', 'project', 'awesome.project.md')
-  let alexProxy, fileWithOneError, reporter, stream, validFile
+  let alexProxy, fileWithOneError, findUpStub, reporter, stream, validFile
 
   beforeEach(() => {
+    findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve(null))
     reporter = austin.spy()
-    alexProxy = proxyquire('../lib', {'vfile-reporter': reporter})
+    alexProxy = proxyquire('../lib', {
+      'find-up': findUpStub,
+      'vfile-reporter': reporter
+    })
 
     stream = alexProxy()
 
@@ -176,7 +180,7 @@ describe('gulp-alex', () => {
 
   describe('allowables', () => {
     it('should use .alexrc', done => {
-      const findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve('.alexrc'))
+      findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve('.alexrc'))
       const fsStub = {
         readFile(file, encoding, cb) {
           cb(null, '{"allow": ["garbagemen-garbagewomen"]}')

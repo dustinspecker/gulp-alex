@@ -8,6 +8,11 @@ import fs from 'fs'
 import reporter from 'vfile-reporter'
 import through from 'through2'
 
+const runAlex = (callback, file, allow = []) => {
+  file.alex = alex(file.contents.toString(), allow)
+  return callback(null, file)
+}
+
 module.exports = () =>
   through.obj(function (file, encoding, callback) {
     if (!file || file.isNull()) {
@@ -18,8 +23,7 @@ module.exports = () =>
     findUp('.alexrc')
       .then(alexRcPath => {
         if (!alexRcPath) {
-          file.alex = alex(file.contents.toString())
-          return callback(null, file)
+          return runAlex(callback, file)
         }
 
         fs.readFile(alexRcPath, 'utf8', (err, fileContents) => {
@@ -28,8 +32,7 @@ module.exports = () =>
           }
 
           const {allow} = JSON.parse(fileContents)
-          file.alex = alex(file.contents.toString(), allow)
-          return callback(null, file)
+          return runAlex(callback, file, allow)
         })
       })
   })

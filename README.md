@@ -55,7 +55,7 @@ gulp.task('alex', function () {
 //   2:1 `garbageman` may be insensitive, use `garbage collector`, `waste collector`, `trash collector` instead
 ```
 
-### Alex Config
+## Alex Config
 `gulp-alex` uses `.alexrc` or `package.json` as described in [Alex's Ignoring Messages](https://github.com/wooorm/alex#ignoring-messages).
 
 ## LICENSE

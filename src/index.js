@@ -2,7 +2,9 @@
 'use strict'
 import alex from 'alex'
 import convertVinylToVfile from 'convert-vinyl-to-vfile'
+import findUp from 'find-up'
 import {PluginError} from 'gulp-util'
+import fs from 'fs'
 import reporter from 'vfile-reporter'
 import through from 'through2'
 
@@ -13,9 +15,23 @@ module.exports = () =>
       return callback()
     }
 
-    file.alex = alex(file.contents.toString())
+    findUp('.alexrc')
+      .then(alexRcPath => {
+        if (!alexRcPath) {
+          file.alex = alex(file.contents.toString())
+          return callback(null, file)
+        }
 
-    callback(null, file)
+        fs.readFile(alexRcPath, 'utf8', (err, fileContents) => {
+          if (err) {
+            throw err
+          }
+
+          const {allow} = JSON.parse(fileContents)
+          file.alex = alex(file.contents.toString(), allow)
+          return callback(null, file)
+        })
+      })
   })
 
 module.exports.reporter = reporterType => {

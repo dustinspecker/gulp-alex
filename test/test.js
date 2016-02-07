@@ -172,4 +172,38 @@ describe('gulp-alex', () => {
       stream.end()
     })
   })
+
+  describe('allowables', () => {
+    it('should use .alexrc', done => {
+      const findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve('.alexrc'))
+      const fsStub = {
+        readFile(file, encoding, cb) {
+          cb(null, '{"allow": ["garbagemen-garbagewomen"]}')
+        }
+      }
+
+      alexProxy = proxyquire('../lib', {
+        'find-up': findUpStub,
+        fs: fsStub,
+        'vfile-reporter': reporter
+      })
+
+      stream
+        .pipe(alexProxy())
+        .pipe(alexProxy.reporter('fail'))
+        .on('data', () => undefined)
+        .on('error', () => {
+          expect(true).to.eql('an error should not happen')
+        })
+        .on('end', () => {
+          expect(findUpStub.callCount()).to.eql(1)
+          done()
+        })
+
+      stream.write(validFile)
+      stream.write(fileWithOneError)
+
+      stream.end()
+    })
+  })
 })

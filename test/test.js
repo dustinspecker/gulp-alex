@@ -4,6 +4,7 @@ import austin from 'austin'
 import {expect} from 'chai'
 import {File} from 'gulp-util'
 import {join} from 'path'
+import Promise from 'pinkie-promise'
 import proxyquire from 'proxyquire'
 
 describe('gulp-alex', () => {

@@ -4,6 +4,7 @@ import alex from 'alex'
 import convertVinylToVfile from 'convert-vinyl-to-vfile'
 import findUp from 'find-up'
 import fs from 'fs'
+import readPkgUp from 'read-pkg-up'
 import {PluginError} from 'gulp-util'
 import reporter from 'vfile-reporter'
 import through from 'through2'
@@ -23,7 +24,13 @@ module.exports = () =>
     findUp('.alexrc')
       .then(alexRcPath => {
         if (!alexRcPath) {
-          return runAlex(callback, file)
+          readPkgUp().then(({pkg}) => {
+            if (pkg && pkg.alex && pkg.alex.allow) {
+              return runAlex(callback, file, pkg.alex.allow)
+            }
+
+            return runAlex(callback, file)
+          })
         }
 
         fs.readFile(alexRcPath, 'utf8', (err, fileContents) => {

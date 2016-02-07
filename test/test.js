@@ -9,13 +9,15 @@ import proxyquire from 'proxyquire'
 
 describe('gulp-alex', () => {
   const filePath = join('users', 'dustin', 'project', 'awesome.project.md')
-  let alexProxy, fileWithOneError, findUpStub, reporter, stream, validFile
+  let alexProxy, fileWithOneError, findUpStub, readPkgUpStub, reporter, stream, validFile
 
   beforeEach(() => {
     findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve(null))
+    readPkgUpStub = austin.spy().returns(Promise.resolve({}))
     reporter = austin.spy()
     alexProxy = proxyquire('../lib', {
       'find-up': findUpStub,
+      'read-pkg-up': readPkgUpStub,
       'vfile-reporter': reporter
     })
 
@@ -202,6 +204,37 @@ describe('gulp-alex', () => {
         })
         .on('end', () => {
           expect(findUpStub.callCount()).to.eql(2)
+          done()
+        })
+
+      stream.write(validFile)
+      stream.write(fileWithOneError)
+
+      stream.end()
+    })
+
+    it('should use package.json if .alexrc file not found', done => {
+      readPkgUpStub = austin.spy().returns(Promise.resolve({
+        pkg: {
+          alex: {
+            allow: ['garbagemen-garbagewomen']
+          }
+        }
+      }))
+      alexProxy = proxyquire('../lib', {
+        'find-up': findUpStub,
+        'read-pkg-up': readPkgUpStub,
+        'vfile-reporter': reporter
+      })
+
+      stream
+        .pipe(alexProxy())
+        .pipe(alexProxy.reporter('fail'))
+        .on('data', () => undefined)
+        .on('error', () => {
+          expect(true).to.eql('an error should not happen')
+        })
+        .on('end', () => {
           done()
         })
 

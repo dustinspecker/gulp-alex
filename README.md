@@ -14,8 +14,8 @@ npm install --save-dev gulp-alex
 ### ES2015
 ```javascript
 // gulpfile.babel.js
-import alex from 'gulp-alex';
-import gulp from 'gulp';
+import alex from 'gulp-alex'
+import gulp from 'gulp'
 
 /* ./README.md */
 // # Awesome project!
@@ -26,7 +26,7 @@ gulp.task('alex', () =>
     .pipe(alex.reporter()) // prints any issues Alex finds to the console
     .pipe(alex.reporter('fail')) // emits an error after the task is ran if there are errors in any files
     .pipe(alex.reporter('failImmediately')) // causes the task to fail right away if Alex finds any issues with a file
-);
+)
 // `gulp alex` produces in console:
 // README.md
 //   2:1 `garbageman` may be insensitive, use `garbage collector`, `waste collector`, `trash collector` instead
@@ -37,8 +37,8 @@ gulp.task('alex', () =>
 ### ES5
 ```javascript
 // gulpfile.js
-var alex = require('gulp-alex');
-var gulp = require('gulp');
+var alex = require('gulp-alex')
+  , gulp = require('gulp')
 
 /* ./README.md */
 // # Awesome project!
@@ -49,7 +49,7 @@ gulp.task('alex', function () {
     .pipe(alex.reporter()) // prints any issues Alex finds to the console
     .pipe(alex.reporter('fail')) // emits an error after the task is ran if there are errors in any files
     .pipe(alex.reporter('failImmediately')); // causes the task to fail right away if Alex finds any issues with a file
-});
+})
 // `gulp alex` produces in console:
 // README.md
 //   2:1 `garbageman` may be insensitive, use `garbage collector`, `waste collector`, `trash collector` instead

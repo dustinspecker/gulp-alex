@@ -196,7 +196,7 @@ describe('gulp-alex', () => {
           expect(true).to.eql('an error should not happen')
         })
         .on('end', () => {
-          expect(findUpStub.callCount()).to.eql(1)
+          expect(findUpStub.callCount()).to.eql(2)
           done()
         })
 

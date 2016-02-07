@@ -3,8 +3,8 @@
 import alex from 'alex'
 import convertVinylToVfile from 'convert-vinyl-to-vfile'
 import findUp from 'find-up'
-import {PluginError} from 'gulp-util'
 import fs from 'fs'
+import {PluginError} from 'gulp-util'
 import reporter from 'vfile-reporter'
 import through from 'through2'
 

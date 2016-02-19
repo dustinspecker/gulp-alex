@@ -16,6 +16,7 @@ const runAlex = (callback, file, allow = []) => {
 
 module.exports = () =>
   through.obj(function (file, encoding, callback) {
+    /* eslint consistent-return: 0 */
     if (!file || file.isNull()) {
       this.push()
       return callback()
@@ -53,19 +54,18 @@ module.exports.reporter = (reporterType = 'default') => {
   return through.obj(function (file, encoding, callback) {
     let error = null
       , foundIssues = false
-      , convertedFile, report
 
     if (!file || file.isNull()) {
       this.push()
       return callback()
     }
 
-    convertedFile = convertVinylToVfile(file)
+    const convertedFile = convertVinylToVfile(file)
     convertedFile.messages = file.alex.messages
 
     // default report to console
     if (isDefaultReporter) {
-      report = reporter(convertedFile, {quiet: true})
+      const report = reporter(convertedFile, {quiet: true})
       if (report) {
         console.log(report)
       }

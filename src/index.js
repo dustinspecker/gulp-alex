@@ -25,13 +25,9 @@ module.exports = () =>
     findUp('.alexrc')
       .then(alexRcPath => {
         if (!alexRcPath) {
-          readPkgUp().then(({pkg}) => {
-            if (pkg && pkg.alex && pkg.alex.allow) {
-              return runAlex(callback, file, pkg.alex.allow)
-            }
-
-            return runAlex(callback, file)
-          })
+          readPkgUp().then(({pkg}) =>
+            runAlex(callback, file, pkg && pkg.alex && pkg.alex.allow)
+          )
         }
 
         fs.readFile(alexRcPath, 'utf8', (err, fileContents) => {

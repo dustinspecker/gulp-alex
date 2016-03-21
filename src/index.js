@@ -67,7 +67,7 @@ module.exports.reporter = (reporterType = 'default') => {
       }
     }
 
-    foundIssues = !!file.alex.messages.length
+    foundIssues = file.alex.messages.length
 
     if (isFailImmediatelyReporter && foundIssues) {
       error = new PluginError('gulp-alex', {

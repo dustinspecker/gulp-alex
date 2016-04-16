@@ -12,7 +12,9 @@ describe('gulp-alex', () => {
   let alexProxy, fileWithOneError, findUpStub, readPkgUpStub, reporter, stream, validFile
 
   beforeEach(() => {
-    findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve(null))
+    findUpStub = austin.spy()
+      .withArgs('.alexrc')
+      .returns(Promise.resolve(null))
     readPkgUpStub = austin.spy().returns(Promise.resolve({}))
     reporter = austin.spy()
     alexProxy = proxyquire('../lib', {
@@ -182,7 +184,9 @@ describe('gulp-alex', () => {
 
   describe('allowables', () => {
     it('should use .alexrc', done => {
-      findUpStub = austin.spy().withArgs('.alexrc').returns(Promise.resolve('.alexrc'))
+      findUpStub = austin.spy()
+        .withArgs('.alexrc')
+        .returns(Promise.resolve('.alexrc'))
       const fsStub = {
         readFile(file, encoding, cb) {
           cb(null, '{"allow": ["garbagemen-garbagewomen"]}')

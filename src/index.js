@@ -11,6 +11,7 @@ import through from 'through2'
 
 const runAlex = (callback, file, allow = []) => {
   file.alex = alex(file.contents.toString(), allow)
+
   return callback(null, file)
 }
 
@@ -19,6 +20,7 @@ module.exports = () =>
     /* eslint consistent-return: 0 */
     if (!file || file.isNull()) {
       this.push()
+
       return callback()
     }
 
@@ -36,6 +38,7 @@ module.exports = () =>
           }
 
           const {allow} = JSON.parse(fileContents)
+
           return runAlex(callback, file, allow)
         })
       })
@@ -53,6 +56,7 @@ module.exports.reporter = (reporterType = 'default') => {
 
     if (!file || file.isNull()) {
       this.push()
+
       return callback()
     }
 

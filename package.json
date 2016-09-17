@@ -22,7 +22,7 @@
     "lib"
   ],
   "dependencies": {
-    "alex": "^3.1.0",
+    "alex": "^4.0.1",
     "convert-vinyl-to-vfile": "^0.1.1",
     "find-up": "^1.1.0",
     "gulp-util": "^3.0.6",
